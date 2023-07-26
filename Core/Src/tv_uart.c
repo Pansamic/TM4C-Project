@@ -9,10 +9,15 @@
  * 
  */
 #include <main.h>
+#include <hw_ints.h>
+#include <pin_map.h>
+#include <gpio.h>
+#include <uart.h>
+#include <interrupt.h>
 #include <tv_uart.h>
 #include <tm4c129_it.h>
-#include <pin_map.h>
-#include <hw_ints.h>
+
+
 
 void TV_UART_Init(void)
 {

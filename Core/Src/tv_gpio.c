@@ -13,6 +13,7 @@
 #include <hw_types.h>
 #include <hw_ints.h>
 #include <interrupt.h>
+#include <gpio.h>
 #include <tm4c129_it.h>
 #include <tv_gpio.h>
 

@@ -2,7 +2,7 @@
 
 ## :book: 简介
 
-该项目是武汉大学与湖北工业大学电子设计竞赛实验室控制组，基于自主设计的Tiva-C™系列MCU——TM4C1290NCPDT驱动板所开发的配套驱动软件。
+该项目是武汉大学与湖北汽车工业学院电子设计竞赛实验室控制组，基于自主设计的Tiva-C™系列MCU——TM4C1290NCPDT驱动板所开发的配套驱动软件。
 
 ## :rocket: 功能介绍
 
@@ -49,8 +49,8 @@
 
 ## :rocket: 板上资源列表
 
-![top](./TMC4129_finally%20-%20top.png)
-![bottom](./TMC4129_finally%20-%20bottom.png)
+![top](./figure/TMC4129_finally%20-%20top.png)
+![bottom](./figure/TMC4129_finally%20-%20bottom.png)
 
 ### UART
 
@@ -141,7 +141,7 @@ PCA9685的I2C地址可通过焊上或焊下芯片地址线上的0欧电阻来更
 
 温度传感器NST112的ADD0引脚按照不同的接法可以生成最多4个I2C地址，也就是说，一条I2C总线上最多可以挂载4个温度传感器，这4个温度传感器的地址均不相同。
 
-![NST112%20I2C%20Address](./NST112_I2C.png)
+![NST112%20I2C%20Address](./figure/NST112_I2C.png)
 
 **以下是第一组温度传感器：**
 

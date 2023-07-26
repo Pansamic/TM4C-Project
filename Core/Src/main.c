@@ -10,6 +10,10 @@
  */
 
 #include <main.h>
+#include <interrupt.h>
+#include <gpio.h>
+#include <pwm.h>
+#include <uart.h>
 #include <tv_gpio.h>
 #include <tv_uart.h>
 #include <tv_i2c.h>

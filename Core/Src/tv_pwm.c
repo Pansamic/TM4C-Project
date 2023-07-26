@@ -9,6 +9,8 @@
  * 
  */
 #include <main.h>
+#include <gpio.h>
+#include <pwm.h>
 #include <tv_pwm.h>
 
   void TV_PWM_Init(void)

@@ -9,6 +9,9 @@
  * 
  */
 #include <main.h>
+#include <gpio.h>
+#include <interrupt.h>
+#include <uart.h>
 #include <tm4c129_it.h>
 #include <tv_dma.h>
 #include <tv_uart.h>

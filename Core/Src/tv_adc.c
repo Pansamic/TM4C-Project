@@ -9,6 +9,8 @@
  * 
  */
 #include <main.h>
+#include <gpio.h>
+#include <adc.h>
 #include <tv_adc.h>
 #include <tv_gpio.h>
 #include <hw_ints.h>

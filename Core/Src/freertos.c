@@ -9,6 +9,7 @@
  * 
  */
 #include <main.h>
+#include <gpio.h>
 #include <icm20602.h>
 #include <FreeRTOS.h>
 #include <task.h>
