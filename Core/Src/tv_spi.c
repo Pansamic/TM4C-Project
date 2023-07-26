@@ -11,7 +11,8 @@
 #include <main.h>
 #include <hw_ints.h>
 #include <ssi.h>
-#include <tv_spi.h>>
+#include <gpio.h>
+#include <tv_spi.h>
 #include <tv_gpio.h>
 
 

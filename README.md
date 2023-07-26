@@ -162,6 +162,20 @@ PCA9685的I2C地址可通过焊上或焊下芯片地址线上的0欧电阻来更
 ## :rocket: API
 
 ### LED灯控制
+```c
+void PCA9685_Init(void);
+void RGB1_SetPWM(uint16_t r, uint16_t g, uint16_t b);
+void LED_Green_SetPWM(uint16_t PulseWidth);
+void LED_White_SetPWM(uint16_t PulseWidth);
+void LED_Pink_SetPWM(uint16_t PulseWidth);
+void LED_Red_SetPWM(uint16_t PulseWidth);
+void LED_Yellow_SetPWM(uint16_t PulseWidth);
+void LED_Blue_SetPWM(uint16_t PulseWidth);
+```
+
+参数`PulseWidth`范围从0到4095，表示正占空比的脉宽。
+
+使用`PCA9685_Init()`来初始化PCA9685芯片。之后，调用上面的函数来设置灯的亮度。由于板载6个LED共阳，所以`PulseWidth`参数设置为0时灯亮，设置为4095时灯灭。
 
 ### ADC采样
 

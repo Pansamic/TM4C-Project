@@ -149,6 +149,37 @@ void UART4_IRQHandler(void)
 	}
 }
 
+void UART5_IRQHandler(void)
+{
+	uint32_t IntStatus = UARTIntStatus(UART5_BASE, true);
+	uint8_t Char;
+	if(IntStatus&UART_INT_RX)
+	{
+		UARTIntClear(UART5_BASE,UART_INT_RX);
+		while(UARTCharsAvail(UART5_BASE))
+		{
+			Char = UARTCharGetNonBlocking(UART5_BASE);
+			UARTCharPutNonBlocking(UART5_BASE,Char);
+		}
+	}
+}
+
+void UART6_IRQHandler(void)
+{
+	uint32_t IntStatus = UARTIntStatus(UART6_BASE, true);
+	uint8_t Char;
+	if(IntStatus&UART_INT_RX)
+	{
+		UARTIntClear(UART6_BASE,UART_INT_RX);
+		while(UARTCharsAvail(UART6_BASE))
+		{
+			Char = UARTCharGetNonBlocking(UART6_BASE);
+			UARTCharPutNonBlocking(UART6_BASE,Char);
+		}
+	}
+}
+
+
 void I2C0_IntHandler(void)
 {
 	I2CMIntHandler(&I2C0Inst);

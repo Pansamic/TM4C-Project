@@ -21,7 +21,7 @@ TaskHandle_t TaskHandle_LEDBlink;
 #if USE_JETSON_UART
 TaskHandle_t TaskHandle_JetsonioProcess;
 #endif
-TimerHandle_t TimerHandle_UpdateIMU;
+// TimerHandle_t TimerHandle_UpdateIMU;
 
 void AdjustCar(TimerHandle_t xTimer);
 void KeyDetect(void * argument);
@@ -99,7 +99,7 @@ void Jetsonio_Process(void * argument)
 void UpdateIMU(TimerHandle_t xTimer)
 {
 	configASSERT(xTimer);
-	ICM20602_Update();
+	// ICM20602_Update();
 	// Car.CurrentPitch = ICM20602_dev.AngleX-Car.;
 //	printf("%.5f,%.5f,%.5f\n", ICM20602_dev.AngleX, ICM20602_dev.AngleY, ICM20602_dev.AngleZ);
 	// printf("%.5f,%.5f,%.5f\n", ICM20602_dev.Ax, ICM20602_dev.Ay, ICM20602_dev.Az);

@@ -17,7 +17,7 @@
  * registers. */
 #define PCA9685_1_ADDR         0x40
 #define PCA9685_2_ADDR         0x41
-#define PCA9685_3_ADDR         0x42
+#define PCA9685_3_ADDR         0x43
 
 /**
  * @brief the register address of PCA9685
@@ -125,10 +125,10 @@
 
 void PCA9685_Init(void);
 void RGB1_SetPWM(uint16_t r, uint16_t g, uint16_t b);
-void LED1_SetPWM(uint16_t PulseWidth);
-void LED2_SetPWM(uint16_t PulseWidth);
-void LED3_SetPWM(uint16_t PulseWidth);
-void LED4_SetPWM(uint16_t PulseWidth);
-void LED5_SetPWM(uint16_t PulseWidth);
-void LED6_SetPWM(uint16_t PulseWidth);
+void LED_Green_SetPWM(uint16_t PulseWidth);
+void LED_White_SetPWM(uint16_t PulseWidth);
+void LED_Pink_SetPWM(uint16_t PulseWidth);
+void LED_Red_SetPWM(uint16_t PulseWidth);
+void LED_Yellow_SetPWM(uint16_t PulseWidth);
+void LED_Blue_SetPWM(uint16_t PulseWidth);
 #endif

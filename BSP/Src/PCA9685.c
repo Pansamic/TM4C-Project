@@ -8,6 +8,8 @@
  * @copyright Copyright (c) 2023
  * 
  */
+#include <main.h>
+#include <gpio.h>
 #include <PCA9685.h>
 #include <tv_i2c.h>
 
@@ -23,20 +25,21 @@
 void PCA9685_Init(void)
 {
     /* No.1 PCA9685 initialization */
-    PCA9685_WriteReg(PCA9685_1_ADDR, PCA9685_MODE1, 0x80);
-    SysCtlDelay(120000); // wait for PCA9685 to restart
-    PCA9685_WriteReg(PCA9685_1_ADDR, PCA9685_MODE2, 0x40);
+    PCA9685_WriteReg(PCA9685_1_ADDR, PCA9685_MODE1, 0x00);
+    PCA9685_WriteReg(PCA9685_1_ADDR, PCA9685_MODE2, 0x00);
 
     /* No.2 PCA9685 initialization */
-    PCA9685_WriteReg(PCA9685_2_ADDR, PCA9685_MODE1, 0x80);
-    SysCtlDelay(120000); // wait for PCA9685 to restart
-    PCA9685_WriteReg(PCA9685_2_ADDR, PCA9685_MODE2, 0x40);
+    PCA9685_WriteReg(PCA9685_2_ADDR, PCA9685_MODE1, 0x00);
+    PCA9685_WriteReg(PCA9685_2_ADDR, PCA9685_MODE2, 0x00);
 
     /* No.3 PCA9685 initialization */
-    PCA9685_WriteReg(PCA9685_3_ADDR, PCA9685_MODE1, 0x80);
-    SysCtlDelay(120000); // wait for PCA9685 to restart
-    PCA9685_WriteReg(PCA9685_3_ADDR, PCA9685_MODE2, 0x40);
+    PCA9685_WriteReg(PCA9685_3_ADDR, PCA9685_MODE1, 0x00);
+    PCA9685_WriteReg(PCA9685_3_ADDR, PCA9685_MODE2, 0x00);
+
+    /* set OE pin as low in order to enable PWM output */
+    GPIOPinWrite(GPIO_PORTP_BASE, GPIO_PIN_3, ~GPIO_PIN_3);
 }
+
 /**
  * @brief Set LED_RGB1 PWM duty cycle
  * 
@@ -63,9 +66,9 @@ void RGB1_SetPWM(uint16_t r, uint16_t g, uint16_t b)
 /**
  * @brief Set LED1 PWM duty cycle
  * 
- * @param PulseWidth integer from 0 to 4096
+ * @param PulseWidth integer from 0 to 4095
  */
-void LED1_SetPWM(uint16_t PulseWidth)
+void LED_Green_SetPWM(uint16_t PulseWidth)
 {
     PCA9685_WriteReg(PCA9685_2_ADDR, PCA9685_LED3_ON_L, 0x00);
     PCA9685_WriteReg(PCA9685_2_ADDR, PCA9685_LED3_ON_H, 0x00);
@@ -76,9 +79,9 @@ void LED1_SetPWM(uint16_t PulseWidth)
 /**
  * @brief Set LED2 PWM duty cycle
  * 
- * @param PulseWidth integer from 0 to 4096
+ * @param PulseWidth integer from 0 to 4095
  */
-void LED2_SetPWM(uint16_t PulseWidth)
+void LED_White_SetPWM(uint16_t PulseWidth)
 {
     PCA9685_WriteReg(PCA9685_2_ADDR, PCA9685_LED4_ON_L, 0x00);
     PCA9685_WriteReg(PCA9685_2_ADDR, PCA9685_LED4_ON_H, 0x00);
@@ -89,9 +92,9 @@ void LED2_SetPWM(uint16_t PulseWidth)
 /**
  * @brief Set LED3 PWM duty cycle
  * 
- * @param PulseWidth 
+ * @param PulseWidth integer from 0 to 4095
  */
-void LED3_SetPWM(uint16_t PulseWidth)
+void LED_Pink_SetPWM(uint16_t PulseWidth)
 {
     PCA9685_WriteReg(PCA9685_2_ADDR, PCA9685_LED5_ON_L, 0x00);
     PCA9685_WriteReg(PCA9685_2_ADDR, PCA9685_LED5_ON_H, 0x00);
@@ -102,9 +105,9 @@ void LED3_SetPWM(uint16_t PulseWidth)
 /**
  * @brief Set LED4 PWM duty cycle
  * 
- * @param PulseWidth integer from 0 to 4096
+ * @param PulseWidth integer from 0 to 4095
  */
-void LED4_SetPWM(uint16_t PulseWidth)
+void LED_Red_SetPWM(uint16_t PulseWidth)
 {
     PCA9685_WriteReg(PCA9685_2_ADDR, PCA9685_LED6_ON_L, 0x00);
     PCA9685_WriteReg(PCA9685_2_ADDR, PCA9685_LED6_ON_H, 0x00);
@@ -115,9 +118,9 @@ void LED4_SetPWM(uint16_t PulseWidth)
 /**
  * @brief integer from 0 to 4096
  * 
- * @param PulseWidth integer from 0 to 4096
+ * @param PulseWidth integer from 0 to 4095
  */
-void LED5_SetPWM(uint16_t PulseWidth)
+void LED_Yellow_SetPWM(uint16_t PulseWidth)
 {
     PCA9685_WriteReg(PCA9685_2_ADDR, PCA9685_LED7_ON_L, 0x00);
     PCA9685_WriteReg(PCA9685_2_ADDR, PCA9685_LED7_ON_H, 0x00);
@@ -128,9 +131,9 @@ void LED5_SetPWM(uint16_t PulseWidth)
 /**
  * @brief Set LED6 PWM duty cycle
  * 
- * @param PulseWidth integer from 0 to 4096
+ * @param PulseWidth integer from 0 to 4095
  */
-void LED6_SetPWM(uint16_t PulseWidth)
+void LED_Blue_SetPWM(uint16_t PulseWidth)
 {
     PCA9685_WriteReg(PCA9685_2_ADDR, PCA9685_LED8_ON_L, 0x00);
     PCA9685_WriteReg(PCA9685_2_ADDR, PCA9685_LED8_ON_H, 0x00);

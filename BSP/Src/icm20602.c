@@ -18,12 +18,8 @@ History:
 #ifdef __cplusplus
 extern "C"{
 #endif
-#include <stdio.h>
-#include <math.h>
 #include <main.h>
-#include <tv_i2c.h>
-#include <hw_ints.h>
-#include <hw_memmap.h>
+#include <tv_spi.h>
 #include <icm20602.h>
 
 

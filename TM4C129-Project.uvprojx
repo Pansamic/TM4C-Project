@@ -663,16 +663,6 @@
               <FilePath>.\BSP\Src\motor.c</FilePath>
             </File>
             <File>
-              <FileName>4wheel_differential.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\BSP\Src\4wheel_differential.c</FilePath>
-            </File>
-            <File>
-              <FileName>icm20602.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\BSP\Src\icm20602.c</FilePath>
-            </File>
-            <File>
               <FileName>mdp_io.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\BSP\Src\mdp_io.c</FilePath>
@@ -681,6 +671,16 @@
               <FileName>mdp_pkgproc.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\BSP\Src\mdp_pkgproc.c</FilePath>
+            </File>
+            <File>
+              <FileName>PCA9685.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\BSP\Src\PCA9685.c</FilePath>
+            </File>
+            <File>
+              <FileName>4wheel_differential.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\BSP\Src\4wheel_differential.c</FilePath>
             </File>
           </Files>
         </Group>
