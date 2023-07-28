@@ -6,9 +6,10 @@ extern "C"{
 #include <stdint.h>
 
 void TV_SPI_Init(void);
-void TV_SPI_W(uint8_t uc_SendData);
-void TV_SPI_R(uint8_t uc_RecvData);
-
+void SSI0_WriteByte(uint8_t data);
+void SSI0_Write(uint8_t *data, uint32_t len);
+uint8_t SSI0_ReadByte(void);
+void SSI0_Read(uint8_t *data, uint32_t len);
 
 
 #ifdef __cplusplus

@@ -18,6 +18,7 @@
 #include <tv_gpio.h>
 #include <tv_uart.h>
 #include <tv_i2c.h>
+#include <tv_spi.h>
 #include <tv_pwm.h>
 #include <tv_dma.h>	
 #include <tv_adc.h>
@@ -27,6 +28,8 @@
 #include <FreeRTOS.h>
 #include <task.h>
 
+/* test ssi */
+#include <ssi.h>
 
 DCMotor LeftFrontMotor = {0};
 DCMotor LeftRearMotor = {0};
@@ -35,23 +38,23 @@ DCMotor RightRearMotor = {0};
 Car_t Car = {0};
 ICM20602_t ICM20602_dev = {0};
 /***********************************************/
-/*            K210 UART io Device              */
+/*          OPENMV UART io Device              */
 /***********************************************/
 
-#if USE_K210_UART
-#define K210_OUTPUTBUF1_SIZE 64
-#define K210_OUTPUTBUF2_SIZE 64
-#define K210_INTPUTBUF_SIZE 256
-uint8_t K210io_OutputBuf1[K210_OUTPUTBUF1_SIZE];
-uint8_t K210io_OutputBuf2[K210_OUTPUTBUF2_SIZE];
-uint8_t K210io_InputBuf[K210_INTPUTBUF_SIZE];
-uint8_t K210PackageContainer[16];
-MDP_io K210io;
-const uint8_t K210PkgHead[2]={0xC8,0xFF};
-const MDP_PkgFmt K210PkgFmt=
+#if USE_OPENMV_UART
+#define OPENMV_OUTPUTBUF1_SIZE 64
+#define OPENMV_OUTPUTBUF2_SIZE 64
+#define OPENMV_INTPUTBUF_SIZE 256
+uint8_t OpenMVio_OutputBuf1[OpenMV_OUTPUTBUF1_SIZE];
+uint8_t OpenMVio_OutputBuf2[OpenMV_OUTPUTBUF2_SIZE];
+uint8_t OpenMVio_InputBuf[OpenMV_INTPUTBUF_SIZE];
+uint8_t OpenMVPackageContainer[16];
+MDP_io OpenMVio;
+const uint8_t OpenMVPkgHead[2]={0xC8,0xFF};
+const MDP_PkgFmt OpenMVPkgFmt=
 {
     1,               // enable package head
-	K210PkgHead,     // use Jetson head sequence
+	OpenMVPkgHead,     // use Jetson head sequence
     2,               // head sequence length equals two
     0,               // disable data check
     NULL,            // don't use check algorithm
@@ -60,12 +63,13 @@ const MDP_PkgFmt K210PkgFmt=
     0,               // tail sequence length equals 0
     0                // tail after check value. useless field, cuz check is disabled.
 };
-void K210_PackageProcess(MDP_io* ioDevice, uint8_t *PkgDst);
+void OpenMV_PackageProcess(MDP_io* ioDevice, uint8_t *PkgDst);
 #endif
+
+
 /***********************************************/
 /*       Jetson nano UART io Device            */
 /***********************************************/
-
 #if USE_JETSON_UART
 #define JETSON_OUTPUTBUF1_SIZE 64
 #define JETSON_OUTPUTBUF2_SIZE 64
@@ -134,11 +138,32 @@ int main( void )
     TV_UART_Init();
 //	TV_DMA_Init();
     TV_I2C_Init();
+	TV_SPI_Init();
 	TV_PWM_Init();
 	TV_ADC0_Init();
     PCA9685_Init();
+    RGB1_SetPWM(4095,4095,4095);
+    LED_Red_SetPWM(4095);
+    LED_Green_SetPWM(4095);
+    LED_Blue_SetPWM(4095);
+    LED_Pink_SetPWM(4095);
+    LED_Yellow_SetPWM(4095);
+    LED_White_SetPWM(4095);
+    // uint32_t data=0xFF;
+    // GPIOPinWrite(ICM20602_CS_GPIO_Port, ICM20602_CS_Pin, ~ICM20602_CS_Pin);
+    // SSIDataPut(SSI0_BASE, 0x13&0x7F); // reg:0x13 | write 
+    // while(SSIBusy(SSI0_BASE));
+    // SSIDataPut(SSI0_BASE, 0x28); // data
+    // while(SSIBusy(SSI0_BASE));
+    // SSIDataPut(SSI0_BASE, 0x13|0x80); // reg:0x13 | read
+    // while(SSIBusy(SSI0_BASE));
+    // SSIDataGet(SSI0_BASE, &data);
+    // while(SSIBusy(SSI0_BASE));
+    // GPIOPinWrite(ICM20602_CS_GPIO_Port, ICM20602_CS_Pin, ICM20602_CS_Pin);
+    // printf("data:%x\r\n",data);
+    // for(;;);
 
-#if USE_K210_UART
+#if USE_OPENMV_UART
     io_Init(&K210io, K210_UART, K210io_InputBuf, K210_INTPUTBUF_SIZE, K210io_OutputBuf1, K210_OUTPUTBUF1_SIZE, K210io_OutputBuf2, K210_OUTPUTBUF2_SIZE);
     io_PackageMode(&K210io, K210PackageContainer, 1, 9, K210_PackageProcess);
     io_SetPkgParseFmt(&K210io,&K210PkgFmt);
@@ -158,7 +183,7 @@ int main( void )
     DCMotor_Init(&RightRearMotor, DCMOTOR_DEFAULT_DIRECTION, PWM0_BASE, PWM_OUT_3, RRMotor_RotateDirectionCtrl1_GPIO_Port, RRMotor_RotateDirectionCtrl1_Pin, RRMotor_RotateDirectionCtrl2_GPIO_Port, RRMotor_RotateDirectionCtrl2_Pin);
 	printf("DCMotor init done.\r\n");
 	
-//	Add_ICM20602();
+	Add_ICM20602();
 
     Car_SetVelocity(200,200);
 
@@ -172,8 +197,8 @@ int main( void )
     }
 }
 
-#if USE_K210_UART
-void K210_PackageProcess(MDP_io* ioDevice, uint8_t *PkgDst)
+#if USE_OPENMV_UART
+void OpenMV_PackageProcess(MDP_io* ioDevice, uint8_t *PkgDst)
 {
     if(PkgDst[0]==0)
     {
@@ -228,4 +253,9 @@ int fputc(int ch, FILE *f)
 {
     UARTCharPut(USB_UART, ch);
     return ch;
+}
+
+void __error__(char *pcFilename, uint32_t ui32Line)
+{
+    printf("Error: %s, %d\r\n", pcFilename, ui32Line);
 }

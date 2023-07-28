@@ -432,6 +432,11 @@
               <FileType>1</FileType>
               <FilePath>.\Core\Src\i2cm_drv.c</FilePath>
             </File>
+            <File>
+              <FileName>tv_spi.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\Core\Src\tv_spi.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -681,6 +686,11 @@
               <FileName>4wheel_differential.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\BSP\Src\4wheel_differential.c</FilePath>
+            </File>
+            <File>
+              <FileName>icm20602.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\BSP\Src\icm20602.c</FilePath>
             </File>
           </Files>
         </Group>

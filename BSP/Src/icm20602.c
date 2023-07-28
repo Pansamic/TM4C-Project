@@ -18,7 +18,9 @@ History:
 #ifdef __cplusplus
 extern "C"{
 #endif
+#include <math.h>
 #include <main.h>
+#include <gpio.h>
 #include <tv_spi.h>
 #include <icm20602.h>
 
@@ -28,14 +30,6 @@ extern "C"{
  *                                      MACROS                                           *
  *                                                                                       *
  *****************************************************************************************/
-#define ICM20602_WriteByte(Reg,Value)\
-    I2C8_WriteByte(ICM20602_slave_addr,Reg,Value)
-#define ICM20602_Write(Reg,pData,Length)\
-    I2C8_Write(ICM20602_slave_addr,Reg,pData,Length)
-#define ICM20602_ReadByte(Reg)\
-    I2C8_ReadByte(ICM20602_slave_addr,Reg)
-#define ICM20602_Read(Reg,pBuf,Length)\
-    I2C8_Read(ICM20602_slave_addr,Reg,pBuf,Length)
 
 
 /*****************************************************************************************
@@ -73,6 +67,10 @@ enum Gscale
  *                                    DECLARATION                                        *
  *                                                                                       *
  *****************************************************************************************/
+void ICM20602_WriteByte(uint8_t Reg,uint8_t Value);
+void ICM20602_Write(uint8_t Reg,uint8_t *pBuf,uint8_t Length);
+uint8_t ICM20602_ReadByte(uint8_t Reg);
+void ICM20602_Read(uint8_t Reg,uint8_t *pBuf,uint8_t Length);
 void ICM20602_HardwareInit( void );
 void ICM20602_whoAmI( void );
 void ICM20602_StaticCallibration(void);
@@ -85,6 +83,60 @@ float Kalman_Filter_y(float Angle,float AngVelocity);
  *                                                                                       *
  *****************************************************************************************/
 /*****************************************************************************************************
+ * @name:ICM20602_WriteByte
+ * @brief: write register value to ICM20602 via SPI communication.
+ * @params: none
+ * @retval: none
+ * @author: Wang Geng Jie
+ *****************************************************************************************************/
+
+void ICM20602_WriteByte(uint8_t Reg,uint8_t Value)
+{
+    GPIOPinWrite(ICM20602_CS_GPIO_Port,ICM20602_CS_Pin,~ICM20602_CS_Pin);
+    SSI0_WriteByte(Reg&0x7F);
+    SSI0_WriteByte(Value);
+    GPIOPinWrite(ICM20602_CS_GPIO_Port,ICM20602_CS_Pin,ICM20602_CS_Pin);
+}
+/*****************************************************************************************************
+ * @name:ICM20602_Read
+ * @brief: read several registers' value from ICM20602 via SPI communication.
+ * @params: none
+ * @retval: none
+ * @author: Wang Geng Jie
+ *****************************************************************************************************/
+void ICM20602_Read(uint8_t Reg,uint8_t *pBuf,uint8_t Length)
+{
+    GPIOPinWrite(ICM20602_CS_GPIO_Port,ICM20602_CS_Pin,~ICM20602_CS_Pin);
+    for(uint8_t i=0 ; i<Length ; i++)
+    {
+        SSI0_WriteByte((Reg + i)|0x80);
+        *(pBuf+i) = SSI0_ReadByte();
+    }
+    // for(uint8_t i=0 ; i<Length ; i++)
+    // {
+    //     *(pBuf+i) = SSI0_ReadByte();
+    // }
+    GPIOPinWrite(ICM20602_CS_GPIO_Port,ICM20602_CS_Pin,ICM20602_CS_Pin);
+}
+/*****************************************************************************************************
+ * @name:ICM20602_ReadByte
+ * @brief: read several registers' value from ICM20602 via SPI communication.
+ * @params: none
+ * @retval: none
+ * @author: Wang Geng Jie
+ *****************************************************************************************************/
+uint8_t ICM20602_ReadByte(uint8_t Reg)
+{
+    uint8_t data = 0;
+    GPIOPinWrite(ICM20602_CS_GPIO_Port,ICM20602_CS_Pin,~ICM20602_CS_Pin);
+    SSI0_WriteByte(Reg|0x80);
+    data = SSI0_ReadByte();
+    GPIOPinWrite(ICM20602_CS_GPIO_Port,ICM20602_CS_Pin,ICM20602_CS_Pin);
+    return data;
+}
+
+
+/*****************************************************************************************************
  * @name:
  * @brief:
  * @params: none
@@ -93,10 +145,6 @@ float Kalman_Filter_y(float Angle,float AngVelocity);
  *****************************************************************************************************/
 void Add_ICM20602(void)
 {
-	/**********************************************/
-	/*        MPU6050 STRUCT INITIALIZATION       */
-	/**********************************************/
-
 	/* Accelerometer configuration */
 	ICM20602_dev.Accel_X_RAW = 0;
 	ICM20602_dev.Accel_Y_RAW = 0;
@@ -122,33 +170,12 @@ void Add_ICM20602(void)
 
 	ICM20602_HardwareInit();
 	printf("ICM20602 init done.\r\n");
-    SysCtlDelay(120000);
-	printf("ICM20602 callibration start.\r\n");
-    ICM20602_StaticCallibration();
-	printf("ICM20602 callibration done.\r\n");
+    // SysCtlDelay(120000);
+	// printf("ICM20602 callibration start.\r\n");
+    // ICM20602_StaticCallibration();
+	// printf("ICM20602 callibration done.\r\n");
 }
-/*****************************************************************************************************
- * @name:ICM20602_whoAmI
- * @brief:Communication test: WHO_AM_I register should return 0x12.
- * @params: none
- * @retval: none
- * @author: Wang Geng Jie
- * @note: WHO_AM_I register always return other value, but that doesn't influence the function 
- *        of ICM20602. You can read correct value from output register. 
- *****************************************************************************************************/
-void ICM20602_whoAmI( void )
-{
-    uint8_t RegVal = ICM20602_ReadByte(ICM20602_WHO_AM_I);
-    
-    if(RegVal==0x12)
-    {
-        printf("ICM20602 is online, Identification code:%x.",RegVal);
-    }
-    else
-    {
-        printf("ICM20602 is offline, Identification code:%x, expect 0x12.",RegVal);
-    }
-}
+
 /*****************************************************************************************************
  * @name: ICM20602_HardwareInit
  * @brief: Write bytes to some configuration registers and initializes ICM20602 hardware.
@@ -165,6 +192,9 @@ void ICM20602_HardwareInit( void )
     /* CLK_SEL=0 internal 20MHz, TEMP_DIS=0, SLEEP=0 */
     ICM20602_WriteByte(ICM20602_PWR_MGMT_1,0x01);
 
+    /* set ICM20602 works in SPI mode only */
+    ICM20602_WriteByte(ICM20602_I2C_IF,0x40);
+
     /* Enable Acc & Gyro */
     ICM20602_WriteByte(ICM20602_PWR_MGMT_2,0x00);
 
@@ -177,11 +207,21 @@ void ICM20602_HardwareInit( void )
 
     /* Average of 8 samples | Accelerometer Low Pass Filter 21.2Hz */
     ICM20602_WriteByte(ICM20602_ACCEL_CONFIG2,0x14);
+
+    uint8_t data = ICM20602_ReadByte(ICM20602_ACCEL_CONFIG2);
+    printf("receive data:%x\r\n",data);
 	
     ICM20602_SetAccRange(AFS_2G);
     ICM20602_SetGyroRange(GFS_1000DPS);
 }
 
+/*****************************************************************************************************
+ * @name: ICM20602_StaticCallibration
+ * @brief: static callibration for ICM20602.陀螺仪静态校准
+ * @params: none
+ * @retval: none
+ * @author: Wang Geng Jie
+ *****************************************************************************************************/
 void ICM20602_StaticCallibration(void)
 {
     int32_t GyroXSum = 0;
@@ -189,6 +229,7 @@ void ICM20602_StaticCallibration(void)
 	int32_t GyroZSum = 0;
     uint8_t Buffer[6];
 
+    /* get the average of 10000 times samples */
     for(uint16_t i=0 ; i<10000 ; i++)
     {
         ICM20602_Read(ICM20602_GYRO_XOUT_H, Buffer, 6);
@@ -205,7 +246,7 @@ void ICM20602_StaticCallibration(void)
 /*****************************************************************************************************
  * @name: ICM20602_Update
  * @brief: Read data from ICM20602, calculate attitude angle with kalman filter and update IMU data.
- * @params: 1.TimeInterval: time interval between two updates.
+ * @params: none
  * @retval: none
  * @author: Wang Geng Jie
  *****************************************************************************************************/

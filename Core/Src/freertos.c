@@ -21,7 +21,7 @@ TaskHandle_t TaskHandle_LEDBlink;
 #if USE_JETSON_UART
 TaskHandle_t TaskHandle_JetsonioProcess;
 #endif
-// TimerHandle_t TimerHandle_UpdateIMU;
+TimerHandle_t TimerHandle_UpdateIMU;
 
 void AdjustCar(TimerHandle_t xTimer);
 void KeyDetect(void * argument);
@@ -39,11 +39,11 @@ void TV_FREERTOS_Init(void)
 #if USE_JETSON_UART
 	xTaskCreate(Jetsonio_Process, "Task_JetsonioProcess", 256, NULL, 2, &TaskHandle_JetsonioProcess);
 #endif
-	// TimerHandle_UpdateIMU = xTimerCreate("Timer_UpdateIMU", IMU_UPDATE_INTERVAL, pdTRUE, NULL, UpdateIMU);
+	TimerHandle_UpdateIMU = xTimerCreate("Timer_UpdateIMU", IMU_UPDATE_INTERVAL, pdTRUE, NULL, UpdateIMU);
 	portENABLE_INTERRUPTS();
 	IntMasterEnable();
 	xTimerStart(TimerHandle_AdjustCar, 0);
-	// xTimerStart(TimerHandle_UpdateIMU, 0);
+	xTimerStart(TimerHandle_UpdateIMU, 0);
 }
 
 void AdjustCar(TimerHandle_t xTimer)
@@ -99,10 +99,11 @@ void Jetsonio_Process(void * argument)
 void UpdateIMU(TimerHandle_t xTimer)
 {
 	configASSERT(xTimer);
-	// ICM20602_Update();
+	ICM20602_Update();
 	// Car.CurrentPitch = ICM20602_dev.AngleX-Car.;
-//	printf("%.5f,%.5f,%.5f\n", ICM20602_dev.AngleX, ICM20602_dev.AngleY, ICM20602_dev.AngleZ);
-	// printf("%.5f,%.5f,%.5f\n", ICM20602_dev.Ax, ICM20602_dev.Ay, ICM20602_dev.Az);
+	// printf("%.5f,%.5f,%.5f\n", ICM20602_dev.AngleX, ICM20602_dev.AngleY, ICM20602_dev.AngleZ);
+	printf("%.5f,%.5f,%.5f\n", ICM20602_dev.Ax, ICM20602_dev.Ay, ICM20602_dev.Az);
+	// printf("%.5f,%.5f,%.5f\n", ICM20602_dev.Gx, ICM20602_dev.Gy, ICM20602_dev.Gz);
 }
 
 void vApplicationStackOverflowHook( TaskHandle_t xTask, char *pcTaskName )

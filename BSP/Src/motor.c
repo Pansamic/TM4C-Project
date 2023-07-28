@@ -305,11 +305,15 @@ void SetMotorPWM(DCMotor* Motor, int32_t TimerCounterLoadVal)
 	else if(TimerCounterLoadVal>0)
 	{
 		SetMotorRotateForward(Motor);
+		if(TimerCounterLoadVal > MOTOR_PWM_PERIOD)
+			TimerCounterLoadVal = MOTOR_PWM_PERIOD;
 		PWMPulseWidthSet(Motor->PWMGeneratingTimer, Motor->PWMGeneratingTimerChannel, (uint32_t)TimerCounterLoadVal);
 	}
 	else
 	{
 		SetMotorRotateBackward(Motor);
+		if(TimerCounterLoadVal < -MOTOR_PWM_PERIOD)
+			TimerCounterLoadVal = -MOTOR_PWM_PERIOD;
 		PWMPulseWidthSet(Motor->PWMGeneratingTimer, Motor->PWMGeneratingTimerChannel, (uint32_t)abs(TimerCounterLoadVal));
 	}
 }

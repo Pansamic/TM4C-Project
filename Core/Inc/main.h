@@ -121,10 +121,11 @@ extern "C"{
 #define KEY1_GPIO_Port GPIO_PORTL_BASE
 
 /*****************************************************/
-/*                       ADC                         */
+/*                  SPI CS Pin                       */
 /*****************************************************/
-// #define BATTERY_ADC_Pin GPIO_PIN_3
-// #define BATTERY_ADC_GPIO_Port GPIO_PORTE_BASE
+#define ICM20602_CS_Pin GPIO_PIN_3
+#define ICM20602_CS_GPIO_Port GPIO_PORTA_BASE
+
 
 /*****************************************************/
 /*                      Keyboard                     */

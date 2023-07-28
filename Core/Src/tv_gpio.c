@@ -99,6 +99,11 @@ void TV_GPIO_Init(void)
     GPIOPinTypeGPIOOutput(KEYBOARD8_GPIO_Port, KEYBOARD8_Pin);
 
     /*******************************************************/
+    /*                     SPI CS pin                      */
+    /*******************************************************/
+    GPIOPinTypeGPIOOutput(ICM20602_CS_GPIO_Port, ICM20602_CS_Pin);
+
+    /*******************************************************/
     /*                  Encoder Interrupt                  */
     /*******************************************************/
     GPIOIntRegister(GPIO_PORTM_BASE, EXTI_GPIOM_IRQHandler);

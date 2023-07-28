@@ -120,14 +120,10 @@ History:
 #define I2C_MST_DELAY_CTRL          0x67
 #define ICM20602_SIGNAL_PATH_RESET  0x68
 #define ICM20602_ACCEL_INTEL_CTRL   0x69
-#define ICM20602_USER_CTRL          0x6A  // Bit 7 enable DMP, bit 3 reset DMP
+#define ICM20602_USER_CTRL          0x6A
 #define ICM20602_PWR_MGMT_1         0x6B  // Device defaults to the SLEEP mode
 #define ICM20602_PWR_MGMT_2         0x6C
-#define DMP_BANK                    0x6D  // Activates a specific bank in the DMP
-#define DMP_RW_PNT                  0x6E  // Set read/write pointer to a specific start address in specified DMP bank
-#define DMP_REG                     0x6F  // Register in DMP from which to read or to which to write
-#define DMP_REG_1                   0x70
-#define DMP_REG_2                   0x71
+#define ICM20602_I2C_IF             0x70  // I2C interface disable/enable, bit 6(start from bit 0) set as 1 to disable I2C communication.
 #define ICM20602_FIFO_COUNTH        0x72
 #define ICM20602_FIFO_COUNTL        0x73
 #define ICM20602_FIFO_R_W           0x74
@@ -168,7 +164,32 @@ History:
 
 /**
  * @brief: ICM20602 controller structure
- * @member:
+ * @member: GyroRange: Gyroscope range, 0:250dps, 1:500dps, 2:1000dps, 3:2000dps
+ * @member: GyroResolution: Gyroscope resolution, unit:dps
+ * @member: Gyro_X_RAW: Gyroscope X axis raw data
+ * @member: Gyro_Y_RAW: Gyroscope Y axis raw data
+ * @member: Gyro_Z_RAW: Gyroscope Z axis raw data
+ * @member: Gx: Gyroscope X axis data after callibration
+ * @member: Gy: Gyroscope Y axis data after callibration
+ * @member: Gz: Gyroscope Z axis data after callibration
+ * @member: GOffsetX: Gyroscope X axis offset
+ * @member: GOffsetY: Gyroscope Y axis offset
+ * @member: GOffsetZ: Gyroscope Z axis offset
+ * @member: AccelRange: Accelerometer range, 0:2g, 1:4g, 2:8g, 3:16g
+ * @member: AccelResolution: Accelerometer resolution, unit:g
+ * @member: Accel_X_RAW: Accelerometer X axis raw data
+ * @member: Accel_Y_RAW: Accelerometer Y axis raw data
+ * @member: Accel_Z_RAW: Accelerometer Z axis raw data
+ * @member: Ax: Accelerometer X axis data after callibration
+ * @member: Ay: Accelerometer Y axis data after callibration
+ * @member: Az: Accelerometer Z axis data after callibration
+ * @member: Temperature: Temperature data
+ * @member: AngleX: Angle X axis data after Kalman filter
+ * @member: AngleY: Angle Y axis data after Kalman filter
+ * @member: AngleZ: Angle Z axis data after Kalman filter
+ * @member: VelocityX: Velocity X axis data after Kalman filter
+ *  
+ *
  */
 typedef struct
 {
